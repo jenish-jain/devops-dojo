@@ -44,10 +44,10 @@ func WatchCmd(infoFile string) *cobra.Command {
 				case "hint":
 					PrintHint(infoFile)
 				case "quit":
-					color.Green("Bye by devopsdojo o/")
+					color.Green("Bye by devopsdojo ")
 					os.Exit(0)
 				case "exit":
-					color.Green("Bye by devopsdojo o/")
+					color.Green("Bye by devopsdojo")
 					os.Exit(0)
 				default:
 					color.Yellow("only list or hint commands are available")

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/jenish-jain/devops-dojo/exercises"
+	"github.com/jenish-jain/devops-dojo/internal/exercises"
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 )
@@ -53,7 +53,7 @@ example specific exercise : devopsdojo run variables1`,
 				color.Cyan(result.Out)
 				if result.Exercise.State() == exercises.Pending {
 					color.White("Remove the 'I AM NOT DONE' from the file to keep going\n")
-					return fmt.Errorf("exercise is still pending")
+					return fmt.Errorf("exercise is still pending!")
 				}
 			}
 

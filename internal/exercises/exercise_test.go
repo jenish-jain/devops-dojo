@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/jenish-jain/devops-dojo/exercises"
+	"github.com/jenish-jain/devops-dojo/internal/exercises"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -66,7 +66,7 @@ var _ = Describe("Exercises", func() {
 	Describe("Listing exercises", func() {
 		When("info file exists", func() {
 			It("returns a list with the exercises in it", func() {
-				list, err := exercises.List("../fixtures/info.toml")
+				list, err := exercises.List("../../fixtures/info.toml")
 
 				Expect(err).NotTo(HaveOccurred())
 				Expect(len(list)).To(Equal(2))
@@ -74,7 +74,7 @@ var _ = Describe("Exercises", func() {
 		})
 		When("info file does not exist", func() {
 			It("returns an error", func() {
-				list, err := exercises.List("../fixtures/info404.toml")
+				list, err := exercises.List("../../fixtures/info404.toml")
 
 				Expect(err).To(HaveOccurred())
 				Expect(len(list)).To(Equal(0))
@@ -85,7 +85,7 @@ var _ = Describe("Exercises", func() {
 	Describe("Find an exercise", func() {
 		When("exercise exists in the info file", func() {
 			It("returns info about the exercise", func() {
-				exercise, err := exercises.Find("compile1", "../fixtures/info.toml")
+				exercise, err := exercises.Find("compile1", "../../fixtures/info.toml")
 
 				Expect(err).NotTo(HaveOccurred())
 				Expect(exercise.Name).To(Equal("compile1"))
@@ -96,7 +96,7 @@ var _ = Describe("Exercises", func() {
 		})
 		When("exercise does not exist in the info file", func() {
 			It("returns an error", func() {
-				_, err := exercises.Find("compile404", "../fixtures/info.toml")
+				_, err := exercises.Find("compile404", "../../fixtures/info.toml")
 
 				Expect(err).To(HaveOccurred())
 				Expect(err).To(Equal(exercises.ErrExerciseNotFound))
@@ -107,7 +107,7 @@ var _ = Describe("Exercises", func() {
 	Describe("Reporting progress", func() {
 		When("half exercises pending", func() {
 			It("reports 50% progress", func() {
-				progress, done, total, err := exercises.Progress("../fixtures/progress/info.toml")
+				progress, done, total, err := exercises.Progress("../../fixtures/progress/info.toml")
 				Expect(err).NotTo(HaveOccurred())
 				Expect(done).To(Equal(1))
 				Expect(total).To(Equal(2))
@@ -115,4 +115,5 @@ var _ = Describe("Exercises", func() {
 			})
 		})
 	})
+
 })

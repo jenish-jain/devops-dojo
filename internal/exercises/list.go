@@ -55,7 +55,6 @@ func Find(exercise string, infoFile string) (Exercise, error) {
 			return ex, nil
 		}
 	}
-
 	return Exercise{}, ErrExerciseNotFound
 }
 

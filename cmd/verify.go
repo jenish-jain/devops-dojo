@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/jenish-jain/devops-dojo/exercises"
+	"github.com/jenish-jain/devops-dojo/internal/exercises"
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 )

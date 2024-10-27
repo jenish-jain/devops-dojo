@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/jenish-jain/devops-dojo/exercises"
-	"github.com/jenish-jain/devops-dojo/ui"
+	"github.com/jenish-jain/devops-dojo/internal/exercises"
+	"github.com/jenish-jain/devops-dojo/internal/ui"
 	"github.com/spf13/cobra"
 )
 

@@ -7,8 +7,8 @@ import (
 	"runtime"
 
 	"github.com/fatih/color"
-	"github.com/jenish-jain/devops-dojo/exercises"
-	"github.com/jenish-jain/devops-dojo/ui"
+	"github.com/jenish-jain/devops-dojo/internal/exercises"
+	"github.com/jenish-jain/devops-dojo/internal/ui"
 )
 
 func PrintHint(infoFile string) {
@@ -55,7 +55,7 @@ func RunNextExercise(infoFile string) {
 		color.Green("Congratulations!\n\n")
 		color.Green("Here is the output of your program:\n\n")
 		color.Cyan(result.Out)
-		if result.Exercise.State() == exercises.Pending {
+		if result.Exercise.Name != "" && result.Exercise.State() == exercises.Pending {
 			color.White("Remove the 'I AM NOT DONE' from the file to keep going\n")
 			color.Red("exercise is still pending")
 		}

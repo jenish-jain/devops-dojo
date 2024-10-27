@@ -1,6 +1,7 @@
 [[exercises]]
-name = "variables1"
-path = "exercises/variables/variables1/main.go"
+name = "deploy_a_pod"
+path = "exercises/deploying_pod/main.go"
 mode = "compile"
 hint = """
-Variables must have names."""
+try adding a pod.yaml
+"""
