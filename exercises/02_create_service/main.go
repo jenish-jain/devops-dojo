@@ -1,3 +1,4 @@
+// I AM NOT DONE
 package main
 
 import (
@@ -6,13 +7,13 @@ import (
 )
 
 func main() {
-	fmt.Println("Deploying a pod")
+	fmt.Println("Creating a service")
 
 	app := "kubectl"
 
 	arg0 := "apply"
 	arg1 := "-f"
-	arg2 := "exercises/deploying_pod/pod.yaml"
+	arg2 := "exercises/02_create_service/service.yaml"
 
 	cmd := exec.Command(app, arg0, arg1, arg2)
 	stdout, err := cmd.Output()
@@ -22,7 +23,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Command Successfully Executed")
 	fmt.Println(string(stdout))
-	fmt.Println("pod deployed")
 }

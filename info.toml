@@ -1,7 +1,15 @@
 [[exercises]]
 name = "deploy_a_pod"
-path = "exercises/deploying_pod/main.go"
+path = "exercises/01_create_pod/main.go"
 mode = "compile"
 hint = """
 try adding a pod.yaml
+"""
+
+[[exercises]]
+name = "deploy_a_service"
+path = "exercises/02_create_service/main.go"
+mode = "compile"
+hint = """
+try adding service.yaml
 """

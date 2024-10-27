@@ -1,3 +1,4 @@
+// I AM NOT DONE
 package main
 
 import (
@@ -12,7 +13,7 @@ func main() {
 
 	arg0 := "apply"
 	arg1 := "-f"
-	arg2 := "exercises/deploying_pod/pod.yaml"
+	arg2 := "exercises/01_create_pod/pod.yaml"
 
 	cmd := exec.Command(app, arg0, arg1, arg2)
 	stdout, err := cmd.Output()
@@ -22,7 +23,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Command Successfully Executed")
 	fmt.Println(string(stdout))
-	fmt.Println("pod deployed")
 }
