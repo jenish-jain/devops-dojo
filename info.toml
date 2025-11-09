@@ -40,3 +40,17 @@ Create a configmap.yaml file with:
 ConfigMaps store non-sensitive configuration data.
 Example keys: DATABASE_URL, LOG_LEVEL, etc.
 """
+
+[[exercises]]
+name = "create_secret"
+path = "exercises/05_create_secret/main.go"
+mode = "compile"
+hint = """
+Create a secret.yaml file with:
+- kind: Secret
+- type: Opaque
+- data: base64-encoded values
+
+To encode: echo -n 'mypassword' | base64
+Remember: Secrets are for sensitive data like passwords and API keys!
+"""
