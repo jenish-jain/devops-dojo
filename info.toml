@@ -111,3 +111,113 @@ Example:
 
 Production applications should always have health probes!
 """
+
+[[exercises]]
+name = "persistent_volumes"
+path = "exercises/09_persistent_volumes/main.go"
+mode = "compile"
+hint = """
+Create a pvc.yaml file with:
+- kind: PersistentVolumeClaim
+- resources.requests.storage: (e.g., 1Gi)
+- accessModes: (e.g., ReadWriteOnce)
+
+PersistentVolumeClaims request storage from PersistentVolumes.
+Data persists even if pods are deleted.
+Access modes: ReadWriteOnce (RWO), ReadOnlyMany (ROX), ReadWriteMany (RWX)
+"""
+
+[[exercises]]
+name = "ingress"
+path = "exercises/10_ingress/main.go"
+mode = "compile"
+hint = """
+Create an ingress.yaml file with:
+- kind: Ingress
+- rules: with host and path routing
+- backend: referencing a Service
+
+Ingress manages external HTTP/HTTPS access to services.
+Provides load balancing, SSL termination, and name-based routing.
+Requires an Ingress Controller (nginx, traefik, etc.)
+"""
+
+[[exercises]]
+name = "network_policies"
+path = "exercises/11_network_policies/main.go"
+mode = "compile"
+hint = """
+Create a networkpolicy.yaml file with:
+- kind: NetworkPolicy
+- podSelector: to target specific pods
+- policyTypes: Ingress and/or Egress
+- ingress/egress rules
+
+NetworkPolicies control traffic between pods at the network level.
+They act as a firewall for your pods.
+Requires a CNI plugin that supports NetworkPolicy (Calico, Cilium, etc.)
+"""
+
+[[exercises]]
+name = "rbac"
+path = "exercises/12_rbac/main.go"
+mode = "compile"
+hint = """
+Create an rbac.yaml file with:
+- ServiceAccount: Identity for processes in pods
+- Role: Defines permissions (verbs + resources)
+- RoleBinding: Grants permissions to ServiceAccounts
+
+Use --- to separate multiple resources in one file.
+RBAC manages who can do what in your cluster.
+Follow the principle of least privilege!
+"""
+
+[[exercises]]
+name = "statefulset"
+path = "exercises/13_statefulset/main.go"
+mode = "compile"
+hint = """
+Create a statefulset.yaml file with:
+- kind: StatefulSet
+- serviceName: for stable network identity
+- volumeClaimTemplates: for persistent storage
+
+StatefulSets manage stateful applications (databases, etc.).
+Pods get stable names: <name>-0, <name>-1, <name>-2...
+Ordered, graceful deployment and scaling.
+"""
+
+[[exercises]]
+name = "jobs_cronjobs"
+path = "exercises/14_jobs_cronjobs/main.go"
+mode = "compile"
+hint = """
+Create a job.yaml file with either:
+- kind: Job (one-time task)
+- kind: CronJob (scheduled recurring task)
+
+For Jobs:
+- Use restartPolicy: OnFailure or Never
+- Task runs to completion
+
+For CronJobs:
+- Add schedule: in cron format (e.g., "*/5 * * * *")
+- jobTemplate: contains the Job spec
+"""
+
+[[exercises]]
+name = "hpa"
+path = "exercises/15_hpa/main.go"
+mode = "compile"
+hint = """
+Create an hpa.yaml file with:
+- kind: HorizontalPodAutoscaler
+- scaleTargetRef: reference to Deployment
+- minReplicas and maxReplicas
+- metrics: (e.g., CPU utilization)
+
+HPA automatically scales pods based on metrics.
+Requires metrics-server to be installed.
+Helps maintain performance and reduce costs.
+"""

@@ -1,0 +1,14 @@
+# Create an Ingress resource here
+# Hint: Define rules with host, paths, and backend service
+# Example:
+#   rules:
+#   - host: myapp.example.com
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: my-service
+#             port:
+#               number: 80

@@ -213,3 +213,173 @@ func (v *HealthProbesValidator) Validate(content []byte) error {
 
 	return nil
 }
+
+// PersistentVolumeClaimValidator validates PVC configuration
+type PersistentVolumeClaimValidator struct{}
+
+func (v *PersistentVolumeClaimValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	if !strings.Contains(contentStr, "kind: PersistentVolumeClaim") {
+		fmt.Println("\n⚠ Warning: Expected 'kind: PersistentVolumeClaim' in the YAML")
+	}
+
+	if !strings.Contains(contentStr, "resources:") || !strings.Contains(contentStr, "requests:") {
+		fmt.Println("\n⚠ Warning: PVC should specify storage size in resources.requests.storage")
+		fmt.Println("Example: storage: 1Gi")
+	}
+
+	if !strings.Contains(contentStr, "accessModes:") {
+		fmt.Println("\n⚠ Warning: No 'accessModes' found")
+		fmt.Println("Common modes: ReadWriteOnce, ReadOnlyMany, ReadWriteMany")
+	}
+
+	return nil
+}
+
+// IngressValidator validates Ingress configuration
+type IngressValidator struct{}
+
+func (v *IngressValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	if !strings.Contains(contentStr, "kind: Ingress") {
+		fmt.Println("\n⚠ Warning: Expected 'kind: Ingress' in the YAML")
+	}
+
+	if !strings.Contains(contentStr, "rules:") {
+		fmt.Println("\n⚠ Warning: No 'rules' found")
+		fmt.Println("Ingress needs routing rules to direct traffic")
+	}
+
+	if !strings.Contains(contentStr, "host:") {
+		fmt.Println("\n⚠ Warning: Consider adding 'host:' for host-based routing")
+	}
+
+	return nil
+}
+
+// NetworkPolicyValidator validates NetworkPolicy configuration
+type NetworkPolicyValidator struct{}
+
+func (v *NetworkPolicyValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	if !strings.Contains(contentStr, "kind: NetworkPolicy") {
+		fmt.Println("\n⚠ Warning: Expected 'kind: NetworkPolicy' in the YAML")
+	}
+
+	if !strings.Contains(contentStr, "podSelector:") {
+		fmt.Println("\n⚠ Warning: NetworkPolicy requires 'podSelector' to select target pods")
+	}
+
+	hasIngress := strings.Contains(contentStr, "ingress:")
+	hasEgress := strings.Contains(contentStr, "egress:")
+
+	if !hasIngress && !hasEgress {
+		fmt.Println("\n⚠ Warning: NetworkPolicy should define ingress or egress rules")
+	}
+
+	return nil
+}
+
+// RBACValidator validates RBAC resources (ServiceAccount, Role, RoleBinding)
+type RBACValidator struct{}
+
+func (v *RBACValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	hasServiceAccount := strings.Contains(contentStr, "kind: ServiceAccount")
+	hasRole := strings.Contains(contentStr, "kind: Role") || strings.Contains(contentStr, "kind: ClusterRole")
+	hasRoleBinding := strings.Contains(contentStr, "kind: RoleBinding") || strings.Contains(contentStr, "kind: ClusterRoleBinding")
+
+	if !hasServiceAccount && !hasRole && !hasRoleBinding {
+		fmt.Println("\n⚠ Warning: Expected RBAC resources (ServiceAccount, Role, or RoleBinding)")
+	}
+
+	if hasRole && !strings.Contains(contentStr, "rules:") {
+		fmt.Println("\n⚠ Warning: Role should define 'rules' with permissions")
+	}
+
+	if hasRoleBinding && !strings.Contains(contentStr, "roleRef:") {
+		fmt.Println("\n⚠ Warning: RoleBinding requires 'roleRef' to reference a Role")
+	}
+
+	return nil
+}
+
+// StatefulSetValidator validates StatefulSet configuration
+type StatefulSetValidator struct{}
+
+func (v *StatefulSetValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	if !strings.Contains(contentStr, "kind: StatefulSet") {
+		fmt.Println("\n⚠ Warning: Expected 'kind: StatefulSet' in the YAML")
+	}
+
+	if !strings.Contains(contentStr, "serviceName:") {
+		fmt.Println("\n⚠ Warning: StatefulSet requires 'serviceName' for stable network identity")
+	}
+
+	if !strings.Contains(contentStr, "volumeClaimTemplates:") {
+		fmt.Println("\n⚠ Warning: Consider adding 'volumeClaimTemplates' for persistent storage")
+	}
+
+	return nil
+}
+
+// JobValidator validates Job and CronJob configuration
+type JobValidator struct{}
+
+func (v *JobValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	hasJob := strings.Contains(contentStr, "kind: Job")
+	hasCronJob := strings.Contains(contentStr, "kind: CronJob")
+
+	if !hasJob && !hasCronJob {
+		fmt.Println("\n⚠ Warning: Expected 'kind: Job' or 'kind: CronJob' in the YAML")
+	}
+
+	if hasCronJob && !strings.Contains(contentStr, "schedule:") {
+		fmt.Println("\n⚠ Warning: CronJob requires 'schedule' field (cron format)")
+		fmt.Println("Example: schedule: '*/5 * * * *'  # Every 5 minutes")
+	}
+
+	if hasJob && !strings.Contains(contentStr, "restartPolicy:") {
+		fmt.Println("\n⚠ Warning: Jobs should specify 'restartPolicy' (OnFailure or Never)")
+	}
+
+	return nil
+}
+
+// HPAValidator validates HorizontalPodAutoscaler configuration
+type HPAValidator struct{}
+
+func (v *HPAValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	if !strings.Contains(contentStr, "kind: HorizontalPodAutoscaler") {
+		fmt.Println("\n⚠ Warning: Expected 'kind: HorizontalPodAutoscaler' in the YAML")
+	}
+
+	if !strings.Contains(contentStr, "scaleTargetRef:") {
+		fmt.Println("\n⚠ Warning: HPA requires 'scaleTargetRef' to reference the target resource")
+	}
+
+	if !strings.Contains(contentStr, "minReplicas:") {
+		fmt.Println("\n⚠ Warning: Consider setting 'minReplicas' for minimum pod count")
+	}
+
+	if !strings.Contains(contentStr, "maxReplicas:") {
+		fmt.Println("\n⚠ Warning: HPA requires 'maxReplicas' for maximum pod count")
+	}
+
+	hasMetrics := strings.Contains(contentStr, "metrics:") || strings.Contains(contentStr, "targetCPUUtilizationPercentage:")
+	if !hasMetrics {
+		fmt.Println("\n⚠ Warning: HPA should define metrics for autoscaling decisions")
+	}
+
+	return nil
+}

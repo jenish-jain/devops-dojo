@@ -1,0 +1,22 @@
+# Create a Job or CronJob here
+# Job example:
+#   spec:
+#     template:
+#       spec:
+#         containers:
+#         - name: task
+#           image: busybox
+#           command: ["echo", "Hello from the Job"]
+#         restartPolicy: OnFailure
+#
+# CronJob example:
+#   schedule: "*/5 * * * *"  # Every 5 minutes
+#   jobTemplate:
+#     spec:
+#       template:
+#         spec:
+#           containers:
+#           - name: task
+#             image: busybox
+#             command: ["echo", "Hello from CronJob"]
+#           restartPolicy: OnFailure
