@@ -1,0 +1,15 @@
+# This pod has an ImagePullBackOff error! Can you fix it?
+# Hint: Check the image name carefully - is it spelled correctly?
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imagepull-app
+spec:
+  containers:
+  - name: web
+    image: ngimx:1.21
+    # The image name has a typo! It should be "nginx" not "ngimx"
+    # Fix: Change to a valid image name like:
+    # image: nginx:1.21
+    ports:
+    - containerPort: 80

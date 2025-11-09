@@ -221,3 +221,92 @@ HPA automatically scales pods based on metrics.
 Requires metrics-server to be installed.
 Helps maintain performance and reduce costs.
 """
+
+[[exercises]]
+name = "debug_crashloop"
+path = "exercises/16_debug_crashloop/main.go"
+mode = "compile"
+hint = """
+Debug a pod in CrashLoopBackOff state!
+
+The pod keeps crashing and restarting. Use these commands to investigate:
+- kubectl get pods  (check status)
+- kubectl describe pod <pod-name>  (see events)
+- kubectl logs <pod-name>  (see current logs)
+- kubectl logs <pod-name> --previous  (see logs from crashed container)
+
+Common causes:
+- Application crashes or exits immediately
+- Wrong command or entrypoint
+- Missing dependencies or configuration
+- Application errors
+
+Fix the command in crashloop-pod.yaml to keep the container running.
+"""
+
+[[exercises]]
+name = "debug_imagepull"
+path = "exercises/17_debug_imagepull/main.go"
+mode = "compile"
+hint = """
+Debug an ImagePullBackOff error!
+
+The pod can't start because it can't pull the container image. Use:
+- kubectl get pods  (check status)
+- kubectl describe pod <pod-name>  (see error details)
+- kubectl get events  (see recent events)
+
+Common causes:
+- Typo in image name or tag
+- Image doesn't exist in registry
+- Missing authentication for private registry
+- Network issues
+
+Fix the image name in imagepull-pod.yaml (hint: check spelling!).
+"""
+
+[[exercises]]
+name = "debug_pending"
+path = "exercises/18_debug_pending/main.go"
+mode = "compile"
+hint = """
+Debug a pod stuck in Pending state!
+
+The scheduler can't find a node to place this pod. Use:
+- kubectl get pods  (check status)
+- kubectl describe pod <pod-name>  (see scheduling failures)
+- kubectl get nodes  (check available nodes)
+- kubectl describe nodes  (see node capacity)
+
+Common causes:
+- Insufficient CPU or memory on nodes
+- Resource requests too high
+- Node selector doesn't match any nodes
+- Taints without matching tolerations
+
+Fix the resource requests in pending-pod.yaml to reasonable values.
+"""
+
+[[exercises]]
+name = "debug_service"
+path = "exercises/19_debug_service/main.go"
+mode = "compile"
+hint = """
+Debug a service that's not routing traffic to pods!
+
+The service exists but traffic isn't reaching the pods. Use:
+- kubectl get svc  (list services)
+- kubectl describe svc <service-name>  (check selector and endpoints)
+- kubectl get endpoints <service-name>  (see pod IPs)
+- kubectl get pods --show-labels  (check pod labels)
+- kubectl get pods -l app=myapp  (test selector)
+
+Common causes:
+- Service selector doesn't match pod labels
+- Wrong port or targetPort
+- Pods not running
+- Labels missing or incorrect
+
+Fix the service selector in service.yaml to match the pod labels.
+Pro tip: Empty endpoints means the selector doesn't match any pods!
+"""

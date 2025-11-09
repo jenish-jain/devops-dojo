@@ -1,0 +1,19 @@
+# This pod is stuck in Pending state! Can you fix it?
+# Hint: Look at the resource requests - are they reasonable?
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pending-app
+spec:
+  containers:
+  - name: app
+    image: nginx:1.21
+    resources:
+      requests:
+        cpu: "1000"  # Requesting 1000 CPU cores!
+        memory: "1000Gi"  # Requesting 1000 GB of memory!
+      # This is way too much! Most clusters don't have nodes this large.
+      # Fix: Change to reasonable values like:
+      # requests:
+      #   cpu: "100m"  # 0.1 CPU core
+      #   memory: "128Mi"  # 128 MB

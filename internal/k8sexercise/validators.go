@@ -383,3 +383,118 @@ func (v *HPAValidator) Validate(content []byte) error {
 
 	return nil
 }
+
+// CrashLoopValidator validates that the pod won't crash
+type CrashLoopValidator struct{}
+
+func (v *CrashLoopValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	// Check for common crash causes
+	if strings.Contains(contentStr, "command:") {
+		if strings.Contains(contentStr, "exit 1") || strings.Contains(contentStr, "false") {
+			fmt.Println("\n⚠ Warning: Command contains 'exit 1' or 'false' which will cause the pod to crash")
+			fmt.Println("Fix: Change to a command that runs successfully")
+		}
+	}
+
+	if !strings.Contains(contentStr, "restartPolicy:") {
+		fmt.Println("\n💡 Tip: Consider setting 'restartPolicy: Always' (default) for regular pods")
+	}
+
+	return nil
+}
+
+// ImagePullValidator validates image configuration
+type ImagePullValidator struct{}
+
+func (v *ImagePullValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	// Check for common image issues
+	if strings.Contains(contentStr, "image:") {
+		// Look for obviously wrong image names
+		if strings.Contains(contentStr, "ngimx") || strings.Contains(contentStr, "ngin:") {
+			fmt.Println("\n⚠ Warning: Image name appears to have a typo")
+			fmt.Println("Common images: nginx, busybox, redis, postgres")
+		}
+
+		// Check for latest tag
+		lines := strings.Split(contentStr, "\n")
+		for _, line := range lines {
+			if strings.Contains(line, "image:") && !strings.Contains(line, ":") {
+				fmt.Println("\n💡 Tip: Always specify image tags explicitly (e.g., nginx:1.21) instead of using implicit :latest")
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// PendingPodValidator validates resource requests
+type PendingPodValidator struct{}
+
+func (v *PendingPodValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	// Check for unreasonable resource requests
+	if strings.Contains(contentStr, "cpu:") {
+		if strings.Contains(contentStr, "1000") || strings.Contains(contentStr, "100\"") {
+			fmt.Println("\n⚠ Warning: CPU request seems very high (e.g., 1000 cores)")
+			fmt.Println("Typical values: 100m (0.1 core), 500m (0.5 core), 1 (1 core)")
+		}
+	}
+
+	if strings.Contains(contentStr, "memory:") {
+		if strings.Contains(contentStr, "1000Gi") || strings.Contains(contentStr, "100Ti") {
+			fmt.Println("\n⚠ Warning: Memory request seems unreasonably high")
+			fmt.Println("Typical values: 128Mi, 256Mi, 512Mi, 1Gi")
+		}
+	}
+
+	// Check for node selectors
+	if strings.Contains(contentStr, "nodeSelector:") {
+		fmt.Println("\n💡 Tip: Ensure nodeSelector labels match available nodes")
+		fmt.Println("Use: kubectl get nodes --show-labels")
+	}
+
+	return nil
+}
+
+// ServiceDebugValidator validates service configuration
+type ServiceDebugValidator struct{}
+
+func (v *ServiceDebugValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	if !strings.Contains(contentStr, "kind: Service") {
+		return nil
+	}
+
+	// Check for selector
+	if !strings.Contains(contentStr, "selector:") {
+		fmt.Println("\n⚠ Warning: Service has no selector!")
+		fmt.Println("Service selector must match pod labels")
+		return nil
+	}
+
+	// Check for common selector mismatches
+	if strings.Contains(contentStr, "selector:") {
+		fmt.Println("\n💡 Debugging tip: Verify selector matches pod labels")
+		fmt.Println("  1. Check service selector: kubectl describe svc <service-name>")
+		fmt.Println("  2. Check pod labels: kubectl get pods --show-labels")
+		fmt.Println("  3. Check endpoints: kubectl get endpoints <service-name>")
+	}
+
+	// Check for port configuration
+	if !strings.Contains(contentStr, "port:") {
+		fmt.Println("\n⚠ Warning: Service should define 'port'")
+	}
+
+	if !strings.Contains(contentStr, "targetPort:") {
+		fmt.Println("\n⚠ Warning: Consider specifying 'targetPort' explicitly")
+	}
+
+	return nil
+}
