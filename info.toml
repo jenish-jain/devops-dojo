@@ -13,3 +13,17 @@ mode = "compile"
 hint = """
 try adding service.yaml
 """
+
+[[exercises]]
+name = "deploy_deployment"
+path = "exercises/03_deploy_deployment/main.go"
+mode = "compile"
+hint = """
+Create a deployment.yaml file with:
+- kind: Deployment
+- replicas: 3
+- selector with matchLabels
+- template with pod specification
+
+Make sure the selector labels match the pod template labels!
+"""
