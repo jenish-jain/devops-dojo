@@ -1,0 +1,10 @@
+# Create a Pod with health probes
+# Hint: Add both livenessProbe and readinessProbe to your container spec
+# You can use httpGet, tcpSocket, or exec for the probe type
+# Example:
+#   livenessProbe:
+#     httpGet:
+#       path: /healthz
+#       port: 8080
+#     initialDelaySeconds: 3
+#     periodSeconds: 3

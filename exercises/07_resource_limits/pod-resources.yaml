@@ -1,0 +1,4 @@
+# Create a Pod with resource limits and requests
+# Hint: Add a 'resources:' section in the container spec with:
+#   - requests: cpu and memory (minimum guaranteed)
+#   - limits: cpu and memory (maximum allowed)

@@ -54,3 +54,60 @@ Create a secret.yaml file with:
 To encode: echo -n 'mypassword' | base64
 Remember: Secrets are for sensitive data like passwords and API keys!
 """
+
+[[exercises]]
+name = "create_namespace"
+path = "exercises/06_create_namespace/main.go"
+mode = "compile"
+hint = """
+Create a namespace.yaml file with:
+- kind: Namespace
+- metadata with a name (e.g., 'dev', 'production')
+
+Namespaces provide logical isolation for resources.
+They're useful for organizing resources by team, environment, or project.
+"""
+
+[[exercises]]
+name = "resource_limits"
+path = "exercises/07_resource_limits/main.go"
+mode = "compile"
+hint = """
+Create a pod-resources.yaml file with:
+- A Pod specification
+- resources: section in the container spec
+- requests: cpu and memory (minimum guaranteed)
+- limits: cpu and memory (maximum allowed)
+
+Example:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+This ensures fair resource distribution and prevents resource starvation.
+"""
+
+[[exercises]]
+name = "health_probes"
+path = "exercises/08_health_probes/main.go"
+mode = "compile"
+hint = """
+Create a pod-probes.yaml file with:
+- A Pod specification
+- livenessProbe: Kubernetes restarts container if it fails
+- readinessProbe: Kubernetes stops traffic if it fails
+
+Example:
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 3
+    periodSeconds: 3
+
+Production applications should always have health probes!
+"""

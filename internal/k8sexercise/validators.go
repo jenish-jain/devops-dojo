@@ -133,3 +133,83 @@ func (v *SecretValidator) Validate(content []byte) error {
 
 	return nil
 }
+
+// ResourceLimitsValidator validates that resource limits and requests are defined
+type ResourceLimitsValidator struct{}
+
+func (v *ResourceLimitsValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	// Check for resources section
+	if !strings.Contains(contentStr, "resources:") {
+		fmt.Println("\n⚠ Warning: No 'resources:' field found")
+		fmt.Println("Pods should define resource limits and requests")
+		fmt.Println("Example:")
+		fmt.Println("  resources:")
+		fmt.Println("    requests:")
+		fmt.Println("      cpu: 100m")
+		fmt.Println("      memory: 128Mi")
+		fmt.Println("    limits:")
+		fmt.Println("      cpu: 200m")
+		fmt.Println("      memory: 256Mi")
+		return nil
+	}
+
+	// Check for limits
+	if !strings.Contains(contentStr, "limits:") {
+		fmt.Println("\n⚠ Warning: No 'limits:' field found")
+		fmt.Println("Resource limits prevent pods from consuming excessive resources")
+	}
+
+	// Check for requests
+	if !strings.Contains(contentStr, "requests:") {
+		fmt.Println("\n⚠ Warning: No 'requests:' field found")
+		fmt.Println("Resource requests help Kubernetes schedule pods efficiently")
+	}
+
+	// Check for CPU and memory
+	if !strings.Contains(contentStr, "cpu:") {
+		fmt.Println("\n⚠ Warning: No CPU resource specification found")
+	}
+
+	if !strings.Contains(contentStr, "memory:") {
+		fmt.Println("\n⚠ Warning: No memory resource specification found")
+	}
+
+	return nil
+}
+
+// HealthProbesValidator validates that liveness and readiness probes are defined
+type HealthProbesValidator struct{}
+
+func (v *HealthProbesValidator) Validate(content []byte) error {
+	contentStr := string(content)
+
+	hasLiveness := strings.Contains(contentStr, "livenessProbe:")
+	hasReadiness := strings.Contains(contentStr, "readinessProbe:")
+
+	if !hasLiveness && !hasReadiness {
+		fmt.Println("\n⚠ Warning: No health probes found")
+		fmt.Println("Consider adding liveness and readiness probes for production")
+		fmt.Println("Example:")
+		fmt.Println("  livenessProbe:")
+		fmt.Println("    httpGet:")
+		fmt.Println("      path: /healthz")
+		fmt.Println("      port: 8080")
+		fmt.Println("    initialDelaySeconds: 3")
+		fmt.Println("    periodSeconds: 3")
+		return nil
+	}
+
+	if !hasLiveness {
+		fmt.Println("\n⚠ Warning: No 'livenessProbe:' found")
+		fmt.Println("Liveness probes restart unhealthy containers")
+	}
+
+	if !hasReadiness {
+		fmt.Println("\n⚠ Warning: No 'readinessProbe:' found")
+		fmt.Println("Readiness probes ensure traffic only goes to ready pods")
+	}
+
+	return nil
+}
