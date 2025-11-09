@@ -27,3 +27,16 @@ Create a deployment.yaml file with:
 
 Make sure the selector labels match the pod template labels!
 """
+
+[[exercises]]
+name = "create_configmap"
+path = "exercises/04_create_configmap/main.go"
+mode = "compile"
+hint = """
+Create a configmap.yaml file with:
+- kind: ConfigMap
+- data: section with key-value pairs
+
+ConfigMaps store non-sensitive configuration data.
+Example keys: DATABASE_URL, LOG_LEVEL, etc.
+"""
