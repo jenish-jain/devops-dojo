@@ -13,3 +13,300 @@ mode = "compile"
 hint = """
 try adding service.yaml
 """
+
+[[exercises]]
+name = "deploy_deployment"
+path = "exercises/03_deploy_deployment/main.go"
+mode = "compile"
+hint = """
+Create a deployment.yaml file with:
+- kind: Deployment
+- replicas: 3
+- selector with matchLabels
+- template with pod specification
+
+Make sure the selector labels match the pod template labels!
+"""
+
+[[exercises]]
+name = "create_configmap"
+path = "exercises/04_create_configmap/main.go"
+mode = "compile"
+hint = """
+Create a configmap.yaml file with:
+- kind: ConfigMap
+- data: section with key-value pairs
+
+ConfigMaps store non-sensitive configuration data.
+Example keys: DATABASE_URL, LOG_LEVEL, etc.
+"""
+
+[[exercises]]
+name = "create_secret"
+path = "exercises/05_create_secret/main.go"
+mode = "compile"
+hint = """
+Create a secret.yaml file with:
+- kind: Secret
+- type: Opaque
+- data: base64-encoded values
+
+To encode: echo -n 'mypassword' | base64
+Remember: Secrets are for sensitive data like passwords and API keys!
+"""
+
+[[exercises]]
+name = "create_namespace"
+path = "exercises/06_create_namespace/main.go"
+mode = "compile"
+hint = """
+Create a namespace.yaml file with:
+- kind: Namespace
+- metadata with a name (e.g., 'dev', 'production')
+
+Namespaces provide logical isolation for resources.
+They're useful for organizing resources by team, environment, or project.
+"""
+
+[[exercises]]
+name = "resource_limits"
+path = "exercises/07_resource_limits/main.go"
+mode = "compile"
+hint = """
+Create a pod-resources.yaml file with:
+- A Pod specification
+- resources: section in the container spec
+- requests: cpu and memory (minimum guaranteed)
+- limits: cpu and memory (maximum allowed)
+
+Example:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+This ensures fair resource distribution and prevents resource starvation.
+"""
+
+[[exercises]]
+name = "health_probes"
+path = "exercises/08_health_probes/main.go"
+mode = "compile"
+hint = """
+Create a pod-probes.yaml file with:
+- A Pod specification
+- livenessProbe: Kubernetes restarts container if it fails
+- readinessProbe: Kubernetes stops traffic if it fails
+
+Example:
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 3
+    periodSeconds: 3
+
+Production applications should always have health probes!
+"""
+
+[[exercises]]
+name = "persistent_volumes"
+path = "exercises/09_persistent_volumes/main.go"
+mode = "compile"
+hint = """
+Create a pvc.yaml file with:
+- kind: PersistentVolumeClaim
+- resources.requests.storage: (e.g., 1Gi)
+- accessModes: (e.g., ReadWriteOnce)
+
+PersistentVolumeClaims request storage from PersistentVolumes.
+Data persists even if pods are deleted.
+Access modes: ReadWriteOnce (RWO), ReadOnlyMany (ROX), ReadWriteMany (RWX)
+"""
+
+[[exercises]]
+name = "ingress"
+path = "exercises/10_ingress/main.go"
+mode = "compile"
+hint = """
+Create an ingress.yaml file with:
+- kind: Ingress
+- rules: with host and path routing
+- backend: referencing a Service
+
+Ingress manages external HTTP/HTTPS access to services.
+Provides load balancing, SSL termination, and name-based routing.
+Requires an Ingress Controller (nginx, traefik, etc.)
+"""
+
+[[exercises]]
+name = "network_policies"
+path = "exercises/11_network_policies/main.go"
+mode = "compile"
+hint = """
+Create a networkpolicy.yaml file with:
+- kind: NetworkPolicy
+- podSelector: to target specific pods
+- policyTypes: Ingress and/or Egress
+- ingress/egress rules
+
+NetworkPolicies control traffic between pods at the network level.
+They act as a firewall for your pods.
+Requires a CNI plugin that supports NetworkPolicy (Calico, Cilium, etc.)
+"""
+
+[[exercises]]
+name = "rbac"
+path = "exercises/12_rbac/main.go"
+mode = "compile"
+hint = """
+Create an rbac.yaml file with:
+- ServiceAccount: Identity for processes in pods
+- Role: Defines permissions (verbs + resources)
+- RoleBinding: Grants permissions to ServiceAccounts
+
+Use --- to separate multiple resources in one file.
+RBAC manages who can do what in your cluster.
+Follow the principle of least privilege!
+"""
+
+[[exercises]]
+name = "statefulset"
+path = "exercises/13_statefulset/main.go"
+mode = "compile"
+hint = """
+Create a statefulset.yaml file with:
+- kind: StatefulSet
+- serviceName: for stable network identity
+- volumeClaimTemplates: for persistent storage
+
+StatefulSets manage stateful applications (databases, etc.).
+Pods get stable names: <name>-0, <name>-1, <name>-2...
+Ordered, graceful deployment and scaling.
+"""
+
+[[exercises]]
+name = "jobs_cronjobs"
+path = "exercises/14_jobs_cronjobs/main.go"
+mode = "compile"
+hint = """
+Create a job.yaml file with either:
+- kind: Job (one-time task)
+- kind: CronJob (scheduled recurring task)
+
+For Jobs:
+- Use restartPolicy: OnFailure or Never
+- Task runs to completion
+
+For CronJobs:
+- Add schedule: in cron format (e.g., "*/5 * * * *")
+- jobTemplate: contains the Job spec
+"""
+
+[[exercises]]
+name = "hpa"
+path = "exercises/15_hpa/main.go"
+mode = "compile"
+hint = """
+Create an hpa.yaml file with:
+- kind: HorizontalPodAutoscaler
+- scaleTargetRef: reference to Deployment
+- minReplicas and maxReplicas
+- metrics: (e.g., CPU utilization)
+
+HPA automatically scales pods based on metrics.
+Requires metrics-server to be installed.
+Helps maintain performance and reduce costs.
+"""
+
+[[exercises]]
+name = "debug_crashloop"
+path = "exercises/16_debug_crashloop/main.go"
+mode = "compile"
+hint = """
+Debug a pod in CrashLoopBackOff state!
+
+The pod keeps crashing and restarting. Use these commands to investigate:
+- kubectl get pods  (check status)
+- kubectl describe pod <pod-name>  (see events)
+- kubectl logs <pod-name>  (see current logs)
+- kubectl logs <pod-name> --previous  (see logs from crashed container)
+
+Common causes:
+- Application crashes or exits immediately
+- Wrong command or entrypoint
+- Missing dependencies or configuration
+- Application errors
+
+Fix the command in crashloop-pod.yaml to keep the container running.
+"""
+
+[[exercises]]
+name = "debug_imagepull"
+path = "exercises/17_debug_imagepull/main.go"
+mode = "compile"
+hint = """
+Debug an ImagePullBackOff error!
+
+The pod can't start because it can't pull the container image. Use:
+- kubectl get pods  (check status)
+- kubectl describe pod <pod-name>  (see error details)
+- kubectl get events  (see recent events)
+
+Common causes:
+- Typo in image name or tag
+- Image doesn't exist in registry
+- Missing authentication for private registry
+- Network issues
+
+Fix the image name in imagepull-pod.yaml (hint: check spelling!).
+"""
+
+[[exercises]]
+name = "debug_pending"
+path = "exercises/18_debug_pending/main.go"
+mode = "compile"
+hint = """
+Debug a pod stuck in Pending state!
+
+The scheduler can't find a node to place this pod. Use:
+- kubectl get pods  (check status)
+- kubectl describe pod <pod-name>  (see scheduling failures)
+- kubectl get nodes  (check available nodes)
+- kubectl describe nodes  (see node capacity)
+
+Common causes:
+- Insufficient CPU or memory on nodes
+- Resource requests too high
+- Node selector doesn't match any nodes
+- Taints without matching tolerations
+
+Fix the resource requests in pending-pod.yaml to reasonable values.
+"""
+
+[[exercises]]
+name = "debug_service"
+path = "exercises/19_debug_service/main.go"
+mode = "compile"
+hint = """
+Debug a service that's not routing traffic to pods!
+
+The service exists but traffic isn't reaching the pods. Use:
+- kubectl get svc  (list services)
+- kubectl describe svc <service-name>  (check selector and endpoints)
+- kubectl get endpoints <service-name>  (see pod IPs)
+- kubectl get pods --show-labels  (check pod labels)
+- kubectl get pods -l app=myapp  (test selector)
+
+Common causes:
+- Service selector doesn't match pod labels
+- Wrong port or targetPort
+- Pods not running
+- Labels missing or incorrect
+
+Fix the service selector in service.yaml to match the pod labels.
+Pro tip: Empty endpoints means the selector doesn't match any pods!
+"""

@@ -1,0 +1,17 @@
+# Create a NetworkPolicy here
+# Hint: Use podSelector to target pods, define ingress/egress rules
+# Example:
+#   podSelector:
+#     matchLabels:
+#       app: myapp
+#   policyTypes:
+#   - Ingress
+#   - Egress
+#   ingress:
+#   - from:
+#     - podSelector:
+#         matchLabels:
+#           app: frontend
+#     ports:
+#     - protocol: TCP
+#       port: 8080

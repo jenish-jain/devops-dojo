@@ -1,0 +1,8 @@
+# Create a PersistentVolumeClaim here
+# Hint: Specify storage size, accessModes, and optionally storageClassName
+# Example:
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   accessModes:
+#     - ReadWriteOnce

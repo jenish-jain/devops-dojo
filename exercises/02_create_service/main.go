@@ -4,41 +4,20 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
+
+	"github.com/jenish-jain/devops-dojo/internal/k8sexercise"
 )
 
 func main() {
 	fmt.Println("Creating a Kubernetes service using kubectl")
 
-	// Check if kubectl is available
-	if _, err := exec.LookPath("kubectl"); err != nil {
-		fmt.Println("Error: kubectl is not installed or not in PATH")
-		fmt.Println("Please install kubectl to run this exercise")
-		fmt.Println("Visit: https://kubernetes.io/docs/tasks/tools/")
+	runner := k8sexercise.NewRunner(
+		"exercises/02_create_service/service.yaml",
+		"Service",
+		&k8sexercise.NoOpValidator{},
+	)
+
+	if err := runner.Run(); err != nil {
 		os.Exit(1)
 	}
-
-	// Check if YAML file exists
-	yamlPath := "exercises/02_create_service/service.yaml"
-	if _, err := os.Stat(yamlPath); os.IsNotExist(err) {
-		fmt.Printf("Error: %s does not exist\n", yamlPath)
-		os.Exit(1)
-	}
-
-	app := "kubectl"
-	arg0 := "apply"
-	arg1 := "-f"
-	arg2 := yamlPath
-
-	cmd := exec.Command(app, arg0, arg1, arg2)
-	stdout, err := cmd.CombinedOutput()
-
-	if err != nil {
-		fmt.Println("Error executing kubectl:")
-		fmt.Println(string(stdout))
-		os.Exit(1)
-	}
-
-	fmt.Println("Success!")
-	fmt.Println(string(stdout))
 }
